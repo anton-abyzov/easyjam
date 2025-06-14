@@ -14,12 +14,20 @@ python run.py
 
 ### Full Installation (3D ALOHA Mode) 🚀
 ```bash
+# Navigate to easyjam directory
+cd easyjam
+
+# Create environment
 conda create -n easyjam python=3.10
 conda activate easyjam
+
+# Install requirements
 pip install -r requirements.txt
 
 # Install ALOHA simulation (optional but recommended)
-pip install gym-aloha
+cd ../lerobot_source
+pip install -e ".[aloha]"
+cd ../easyjam
 
 # Run with 3D visualization
 python run_3d.py
