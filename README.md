@@ -1,101 +1,117 @@
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="media/lerobot-logo-thumbnail.png">
-    <source media="(prefers-color-scheme: light)" srcset="media/lerobot-logo-thumbnail.png">
-    <img alt="LeRobot, Hugging Face Robotics Library" src="media/lerobot-logo-thumbnail.png" style="max-width: 100%;">
-  </picture>
-  <br/>
-  <br/>
-</p>
+# EasyJam - Guitar Strumming Assistant
 
-<div align="center">
+EasyJam is an accessibility-focused application that helps people with disabilities play guitar by automating the strumming motion while they focus on chord formation. The app uses a simulated robot arm to demonstrate strumming patterns.
 
-[![Tests](https://github.com/huggingface/lerobot/actions/workflows/nightly-tests.yml/badge.svg?branch=main)](https://github.com/huggingface/lerobot/actions/workflows/nightly-tests.yml?query=branch%3Amain)
-[![Coverage](https://codecov.io/gh/huggingface/lerobot/branch/main/graph/badge.svg?token=TODO)](https://codecov.io/gh/huggingface/lerobot)
-[![Python versions](https://img.shields.io/pypi/pyversions/lerobot)](https://www.python.org/downloads/)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/huggingface/lerobot/blob/main/LICENSE)
-[![Status](https://img.shields.io/pypi/status/lerobot)](https://pypi.org/project/lerobot/)
-[![Version](https://img.shields.io/pypi/v/lerobot)](https://pypi.org/project/lerobot/)
-[![Examples](https://img.shields.io/badge/Examples-green.svg)](https://github.com/huggingface/lerobot/tree/main/examples)
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.1%20adopted-ff69b4.svg)](https://github.com/huggingface/lerobot/blob/main/CODE_OF_CONDUCT.md)
-[![Discord](https://dcbadge.vercel.app/api/server/C5P34WJ68S?style=flat)](https://discord.gg/s3KuuzsPFb)
+## Features
 
-</div>
+- **Accessible Interface**: Large buttons, high contrast, keyboard shortcuts, and screen reader support
+- **Chord Selection**: Choose from common guitar chords (G, C, D, Em, Am, E, A)
+- **Strumming Patterns**: Multiple patterns including basic, folk, rock, and reggae styles
+- **Tempo Control**: Adjustable tempo from 60-200 BPM
+- **Visual Feedback**: Real-time robot arm visualization
+- **Responsive Design**: Works on desktop and mobile devices
 
-<h2 align="center">
-    <p><a href="https://huggingface.co/docs/lerobot/so101">
-        Build Your Own SO-101 Robot!</a></p>
-</h2>
+## Installation
 
-<div align="center">
-  <div style="display: flex; gap: 1rem; justify-content: center; align-items: center;" >
-    <img
-      src="media/so101/so101.webp?raw=true"
-      alt="SO-101 follower arm"
-      title="SO-101 follower arm"
-      style="width: 40%;"
-    />
-    <img
-      src="media/so101/so101-leader.webp?raw=true"
-      alt="SO-101 leader arm"
-      title="SO-101 leader arm"
-      style="width: 40%;"
-    />
-  </div>
+1. Clone the repository:
+```bash
+git clone https://github.com/anton-abyzov/easyjam.git
+cd easyjam
+```
 
+2. Create and activate a conda environment:
+```bash
+conda create -n easyjam python=3.10
+conda activate easyjam
+```
 
-  <p><strong>Meet the updated SO100, the SO-101 – Just €114 per arm!</strong></p>
-  <p>Train it in minutes with a few simple moves on your laptop.</p>
-  <p>Then sit back and watch your creation act autonomously! 🤯</p>
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-  <p><a href="https://huggingface.co/docs/lerobot/so101">
-      See the full SO-101 tutorial here.</a></p>
+## Usage
 
-  <p>Want to take it to the next level? Make your SO-101 mobile by building LeKiwi!</p>
-  <p>Check out the <a href="https://huggingface.co/docs/lerobot/lekiwi">LeKiwi tutorial</a> and bring your robot to life on wheels.</p>
+1. Start the application:
+```bash
+python run.py
+```
 
-  <img src="media/lekiwi/kiwi.webp?raw=true" alt="LeKiwi mobile robot" title="LeKiwi mobile robot" width="50%">
-</div>
+2. Open your browser and navigate to `http://localhost:5000`
 
-<br/>
+3. Select chords by clicking the chord buttons
 
-<h3 align="center">
-    <p>LeRobot: State-of-the-art AI for real-world robotics</p>
-</h3>
+4. Choose a strumming pattern from the dropdown
 
----
+5. Adjust the tempo using the slider
 
-🤗 LeRobot aims to provide models, datasets, and tools for real-world robotics in PyTorch. The goal is to lower the barrier to entry to robotics so that everyone can contribute and benefit from sharing datasets and pretrained models.
+6. Click "Play" to start the strumming simulation
 
-🤗 LeRobot contains state-of-the-art approaches that have been shown to transfer to the real-world with a focus on imitation learning and reinforcement learning.
+## Accessibility Features
 
-🤗 LeRobot already provides a set of pretrained models, datasets with human collected demonstrations, and simulation environments to get started without assembling a robot. In the coming weeks, the plan is to add more and more support for real-world robotics on the most affordable and capable robots out there.
+- **Keyboard Navigation**: Full keyboard support with Tab navigation
+- **Screen Reader Support**: ARIA labels and live regions
+- **High Contrast Mode**: Automatically adapts to system preferences
+- **Font Size Controls**: Adjustable text size (A-, A, A+ buttons)
+- **Reduced Motion**: Respects prefers-reduced-motion setting
+- **Keyboard Shortcuts**: 
+  - Space bar: Play/Stop toggle
 
-🤗 LeRobot hosts pretrained models and datasets on this Hugging Face community page: [huggingface.co/lerobot](https://huggingface.co/lerobot)
+## Architecture
 
-#### Examples of pretrained models on simulation environments
+The application consists of three main components:
 
-<table>
-  <tr>
-    <td><img src="media/gym/aloha_act.gif" width="100%" alt="ACT policy on ALOHA env"/></td>
-    <td><img src="media/gym/simxarm_tdmpc.gif" width="100%" alt="TDMPC policy on SimXArm env"/></td>
-    <td><img src="media/gym/pusht_diffusion.gif" width="100%" alt="Diffusion policy on PushT env"/></td>
-  </tr>
-  <tr>
-    <td align="center">ACT policy on ALOHA env</td>
-    <td align="center">TDMPC policy on SimXArm env</td>
-    <td align="center">Diffusion policy on PushT env</td>
-  </tr>
-</table>
+1. **Robot Simulation** (`easyjam/simulation/robot_arm.py`):
+   - Simulates a 6-DOF robot arm
+   - Implements forward and inverse kinematics
+   - Generates smooth strumming trajectories
 
-### Acknowledgment
+2. **Music System** (`easyjam/music/chords.py`):
+   - Chord definitions with fingering information
+   - Strumming pattern library
+   - Chord progression management
 
-- The LeRobot team 🤗 for building SmolVLA [Paper](https://arxiv.org/abs/2506.01844), [Blog](https://huggingface.co/blog/smolvla).
-- Thanks to Tony Zhao, Zipeng Fu and colleagues for open sourcing ACT policy, ALOHA environments and datasets. Ours are adapted from [ALOHA](https://tonyzhaozh.github.io/aloha) and [Mobile ALOHA](https://mobile-aloha.github.io).
-- Thanks to Cheng Chi, Zhenjia Xu and colleagues for open sourcing Diffusion policy, Pusht environment and datasets, as well as UMI datasets. Ours are adapted from [Diffusion Policy](https://diffusion-policy.cs.columbia.edu) and [UMI Gripper](https://umi-gripper.github.io).
-- Thanks to Nicklas Hansen, Yunhai Feng and colleagues for open sourcing TDMPC policy, Simxarm environments and datasets. Ours are adapted from [TDMPC](https://github.com/nicklashansen/tdmpc) and [FOWM](https://www.yunhaifeng.com/FOWM).
-- Thanks to Antonio Loquercio and Ashish Kumar for their early support.
-- Thanks to [Seungjae (Jay) Lee](https://sjlee.cc/), [Mahi Shafiullah](https://mahis.life/) and colleagues for open sourcing [VQ-BeT](https://sjlee.cc/vq-bet/) policy and helping us adapt the codebase to our repository. The policy is adapted from [VQ-BeT repo](https://github.com/jayLEE0301/vq_bet_official).
+3. **Web Interface** (`easyjam/app.py`):
+   - Flask-based REST API
+   - Real-time robot state updates
+   - Responsive HTML interface with accessibility features
+
+## Future Enhancements
+
+- [ ] Integration with real LeRobot SO101 hardware
+- [ ] MIDI input support for chord selection
+- [ ] Voice control for hands-free operation
+- [ ] Guitar tablature import
+- [ ] Recording and playback features
+- [ ] Multi-user collaborative sessions
+- [ ] Mobile app version
+
+## Testing
+
+Run the simulation test:
+```bash
+python test_simulation.py
+```
+
+This will display an animated visualization of the robot arm performing strumming motions.
+
+## Contributing
+
+We welcome contributions! Please focus on:
+- Improving accessibility features
+- Adding new chord types and strumming patterns
+- Enhancing the robot simulation
+- Creating better visualizations
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Built for the LeRobot Hackathon
+- Inspired by the need for accessible music-making tools
+- Uses the LeRobot framework concept for robotics simulation
 
 
 ## Installation
