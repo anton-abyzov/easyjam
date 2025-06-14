@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyJam - 3D Robot Guitar Assistant</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --background-color: #ecf0f1;
+            --text-color: #2c3e50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+
+        .control-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .visualization-panel {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .control-section {
+            margin-bottom: 2rem;
+        }
+
+        .control-section h2 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .chord-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .chord-button {
+            padding: 1rem;
+            font-size: 1.1rem;
+            border: 2px solid var(--primary-color);
+            background: white;
+            color: var(--primary-color);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .chord-button:hover, .chord-button:focus {
+            background-color: var(--primary-color);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .chord-button.selected {
+            background-color: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        .pattern-selector {
+            margin-bottom: 1rem;
+        }
+
+        select, input[type="range"] {
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 5px;
+        }
+
+        .tempo-control {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .tempo-display {
+            font-size: 1.5rem;
+            font-weight: bold;
+            min-width: 100px;
+        }
+
+        .play-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .control-button {
+            padding: 1rem 3rem;
+            font-size: 1.3rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .play-button {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .play-button:hover {
+            background-color: #229954;
+        }
+
+        .stop-button {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .stop-button:hover {
+            background-color: #c0392b;
+        }
+
+        .robot-visualization {
+            text-align: center;
+        }
+
+        .robot-video {
+            width: 100%;
+            max-width: 800px;
+            height: 600px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background: #000;
+        }
+
+        .simulation-info {
+            background: #f0f0f0;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .status-bar {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-size: 1.2rem;
+            margin-top: 2rem;
+            border-radius: 5px;
+        }
+
+        .accessibility-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .font-size-controls button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .fallback-canvas {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background: white;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .chord-selector {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .play-controls {
+                flex-direction: column;
+            }
+            
+            .control-button {
+                width: 100%;
+            }
+        }
+
+        /* High contrast mode */
+        @media (prefers-contrast: high) {
+            :root {
+                --background-color: white;
+                --text-color: black;
+            }
+            
+            .chord-button {
+                border-width: 3px;
+            }
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion) {
+            * {
+                transition: none !important;
+                animation: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="accessibility-controls" role="toolbar" aria-label="Accessibility controls">
+        <div class="font-size-controls">
+            <button onclick="changeFontSize(-1)" aria-label="Decrease font size">A-</button>
+            <button onclick="changeFontSize(0)" aria-label="Reset font size">A</button>
+            <button onclick="changeFontSize(1)" aria-label="Increase font size">A+</button>
+        </div>
+    </div>
+
+    <header>
+        <div class="container">
+            <h1>EasyJam 3D</h1>
+            <p class="subtitle">Guitar Strumming Assistant with ALOHA Robot</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="main-content">
+            <div class="control-panel" role="region" aria-label="Music controls">
+                <div class="control-section">
+                    <h2>Select Chords</h2>
+                    <div class="chord-selector" role="group" aria-label="Chord selection">
+                        <button class="chord-button" data-chord="G" aria-pressed="false">G</button>
+                        <button class="chord-button" data-chord="C" aria-pressed="false">C</button>
+                        <button class="chord-button" data-chord="D" aria-pressed="false">D</button>
+                        <button class="chord-button" data-chord="Em" aria-pressed="false">Em</button>
+                        <button class="chord-button" data-chord="Am" aria-pressed="false">Am</button>
+                        <button class="chord-button" data-chord="E" aria-pressed="false">E</button>
+                        <button class="chord-button" data-chord="A" aria-pressed="false">A</button>
+                        <button class="chord-button" data-chord="F" aria-pressed="false">F</button>
+                        <button class="chord-button" data-chord="Bm" aria-pressed="false">Bm</button>
+                    </div>
+                    <p id="selected-chords" aria-live="polite">Selected: None</p>
+                </div>
+
+                <div class="control-section">
+                    <h2>Strumming Pattern</h2>
+                    <div class="pattern-selector">
+                        <label for="pattern-select" class="sr-only">Select strumming pattern</label>
+                        <select id="pattern-select" aria-label="Strumming pattern">
+                            <option value="basic_down">Basic Down</option>
+                            <option value="basic_alternating" selected>Basic Alternating</option>
+                            <option value="folk_pattern">Folk Pattern</option>
+                            <option value="rock_pattern">Rock Pattern</option>
+                            <option value="reggae_pattern">Reggae Pattern</option>
+                            <option value="flamenco_pattern">Flamenco Pattern</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <h2>Tempo</h2>
+                    <div class="tempo-control">
+                        <label for="tempo-slider" class="sr-only">Tempo slider</label>
+                        <input type="range" id="tempo-slider" min="60" max="200" value="120" 
+                               aria-label="Tempo" aria-valuemin="60" aria-valuemax="200" aria-valuenow="120">
+                        <span class="tempo-display" id="tempo-display" aria-live="polite">120 BPM</span>
+                    </div>
+                </div>
+
+                <div class="play-controls">
+                    <button class="control-button play-button" id="play-button" aria-label="Start playing">
+                        ▶️ Play
+                    </button>
+                    <button class="control-button stop-button" id="stop-button" aria-label="Stop playing">
+                        ⏹️ Stop
+                    </button>
+                </div>
+            </div>
+
+            <div class="visualization-panel" role="region" aria-label="Robot visualization">
+                <h2>3D Robot Visualization</h2>
+                <div class="simulation-info" id="simulation-info">
+                    Checking simulation type...
+                </div>
+                <div class="robot-visualization">
+                    <!-- This will be populated based on available simulation -->
+                    <div id="visualization-container"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-bar" role="status" aria-live="polite" id="status-bar">
+            Ready to play
+        </div>
+    </main>
+
+    <script>
+        let selectedChords = [];
+        let isPlaying = false;
+        let fontSize = 100;
+        let simulationType = '2d';
+
+        // Check simulation type on load
+        async function checkSimulationType() {
+            try {
+                const response = await fetch('/api/simulation_type');
+                const data = await response.json();
+                simulationType = data.type;
+                
+                const infoElement = document.getElementById('simulation-info');
+                const container = document.getElementById('visualization-container');
+                
+                if (data.aloha_available) {
+                    infoElement.textContent = '🎉 3D ALOHA Robot Simulation Active!';
+                    infoElement.style.backgroundColor = '#d4edda';
+                    infoElement.style.color = '#155724';
+                    
+                    // Create video element for ALOHA stream
+                    container.innerHTML = '<img src="/video_feed" class="robot-video" alt="ALOHA robot simulation">';
+                } else {
+                    infoElement.textContent = '2D Simulation Mode (Install gym-aloha for 3D)';
+                    infoElement.style.backgroundColor = '#fff3cd';
+                    infoElement.style.color = '#856404';
+                    
+                    // Fallback to canvas
+                    container.innerHTML = '<canvas id="robot-canvas" class="fallback-canvas" aria-label="2D robot visualization"></canvas>';
+                    initCanvas();
+                }
+            } catch (error) {
+                console.error('Error checking simulation type:', error);
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', checkSimulationType);
+
+        // Chord selection
+        document.querySelectorAll('.chord-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const chord = this.dataset.chord;
+                
+                if (this.classList.contains('selected')) {
+                    this.classList.remove('selected');
+                    this.setAttribute('aria-pressed', 'false');
+                    selectedChords = selectedChords.filter(c => c !== chord);
+                } else {
+                    this.classList.add('selected');
+                    this.setAttribute('aria-pressed', 'true');
+                    selectedChords.push(chord);
+                }
+                
+                updateSelectedChordsDisplay();
+            });
+        });
+
+        function updateSelectedChordsDisplay() {
+            const display = document.getElementById('selected-chords');
+            if (selectedChords.length === 0) {
+                display.textContent = 'Selected: None';
+            } else {
+                display.textContent = 'Selected: ' + selectedChords.join(' - ');
+            }
+        }
+
+        // Tempo control
+        const tempoSlider = document.getElementById('tempo-slider');
+        const tempoDisplay = document.getElementById('tempo-display');
+        
+        tempoSlider.addEventListener('input', function() {
+            const tempo = this.value;
+            tempoDisplay.textContent = tempo + ' BPM';
+            this.setAttribute('aria-valuenow', tempo);
+            
+            if (isPlaying) {
+                updateTempo(tempo);
+            }
+        });
+
+        // Play/Stop controls
+        document.getElementById('play-button').addEventListener('click', async function() {
+            if (selectedChords.length === 0) {
+                updateStatus('Please select at least one chord');
+                return;
+            }
+            
+            const pattern = document.getElementById('pattern-select').value;
+            
+            try {
+                const response = await fetch('/api/play', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chords: selectedChords,
+                        pattern: pattern
+                    })
+                });
+                
+                if (response.ok) {
+                    isPlaying = true;
+                    updateStatus('Playing: ' + selectedChords.join(' - '));
+                    this.disabled = true;
+                    document.getElementById('stop-button').disabled = false;
+                }
+            } catch (error) {
+                updateStatus('Error starting playback');
+            }
+        });
+
+        document.getElementById('stop-button').addEventListener('click', async function() {
+            try {
+                const response = await fetch('/api/stop', {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    isPlaying = false;
+                    updateStatus('Stopped');
+                    document.getElementById('play-button').disabled = false;
+                    this.disabled = true;
+                }
+            } catch (error) {
+                updateStatus('Error stopping playback');
+            }
+        });
+
+        async function updateTempo(tempo) {
+            try {
+                await fetch('/api/tempo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ tempo: parseInt(tempo) })
+                });
+            } catch (error) {
+                console.error('Error updating tempo:', error);
+            }
+        }
+
+        function updateStatus(message) {
+            document.getElementById('status-bar').textContent = message;
+        }
+
+        // Font size controls
+        function changeFontSize(delta) {
+            if (delta === 0) {
+                fontSize = 100;
+            } else {
+                fontSize = Math.max(80, Math.min(150, fontSize + delta * 10));
+            }
+            document.documentElement.style.fontSize = fontSize + '%';
+        }
+
+        // 2D Canvas fallback
+        function initCanvas() {
+            const canvas = document.getElementById('robot-canvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            
+            function resizeCanvas() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+            }
+            
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            // Simple 2D visualization
+            function drawRobot(state) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw guitar
+                ctx.fillStyle = '#8B4513';
+                ctx.fillRect(canvas.width/2 - 50, canvas.height/2 - 100, 100, 200);
+                
+                // Draw strings
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 1;
+                for (let i = 0; i < 6; i++) {
+                    const x = canvas.width/2 - 40 + i * 16;
+                    ctx.beginPath();
+                    ctx.moveTo(x, canvas.height/2 - 100);
+                    ctx.lineTo(x, canvas.height/2 + 100);
+                    ctx.stroke();
+                }
+                
+                // Draw info
+                ctx.fillStyle = '#333';
+                ctx.font = '16px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('2D Visualization Mode', canvas.width/2, 30);
+                
+                if (state && state.current_chord) {
+                    ctx.fillText('Current Chord: ' + state.current_chord, canvas.width/2, canvas.height - 30);
+                }
+            }
+
+            // Update periodically if using 2D mode
+            async function update2D() {
+                if (simulationType === '2d' && isPlaying) {
+                    try {
+                        const response = await fetch('/api/robot_state');
+                        const state = await response.json();
+                        drawRobot(state);
+                    } catch (error) {
+                        console.error('Error fetching robot state:', error);
+                    }
+                }
+                
+                requestAnimationFrame(update2D);
+            }
+
+            update2D();
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === ' ') {
+                e.preventDefault();
+                if (isPlaying) {
+                    document.getElementById('stop-button').click();
+                } else {
+                    document.getElementById('play-button').click();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

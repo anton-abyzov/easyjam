@@ -1,22 +1,31 @@
-# EasyJam - Guitar Strumming Assistant with Robot Simulation
+# EasyJam - Guitar Strumming Assistant with 3D Robot Simulation
 
-EasyJam is an accessibility-focused application that helps people with disabilities play guitar by automating the strumming motion while they focus on chord formation. Built for the LeRobot Hackathon, it demonstrates how robotics can make music more accessible.
+EasyJam is an accessibility-focused application that helps people with disabilities play guitar by automating the strumming motion while they focus on chord formation. Built for the LeRobot Hackathon, it now features **3D ALOHA robot simulation** for realistic visualization.
 
 ## 🎸 Quick Start
 
-1. **Install Dependencies**:
+### Basic Installation (2D Mode)
 ```bash
 conda create -n easyjam python=3.10
 conda activate easyjam
-pip install flask numpy matplotlib
-```
-
-2. **Run the Application**:
-```bash
+pip install -r requirements.txt
 python run.py
 ```
 
-3. **Open Browser**: Navigate to `http://localhost:5005`
+### Full Installation (3D ALOHA Mode) 🚀
+```bash
+conda create -n easyjam python=3.10
+conda activate easyjam
+pip install -r requirements.txt
+
+# Install ALOHA simulation (optional but recommended)
+pip install gym-aloha
+
+# Run with 3D visualization
+python run_3d.py
+```
+
+**Open Browser**: Navigate to `http://localhost:5005`
 
 ## 🎯 How to Use EasyJam
 
@@ -43,10 +52,19 @@ python run.py
 - Watch the robot arm strum in real-time
 - Stop anytime with **⏹️ Stop**
 
-## 🤖 Understanding the Robot Visualization
+## 🤖 Robot Visualization Modes
 
-The simulation shows:
-- **Brown Rectangle**: Guitar body with 6 strings
+### 3D ALOHA Simulation (Recommended)
+When ALOHA is installed, you get:
+- **Dual-arm robot**: Realistic ALOHA robot with two 7-DOF arms
+- **Left arm**: Holds guitar neck and forms chords
+- **Right arm**: Performs strumming motions
+- **Multiple camera views**: High, low, and wrist cameras
+- **Real-time rendering**: Smooth 3D visualization
+
+### 2D Fallback Mode
+Without ALOHA, the app shows:
+- **Simple 2D view**: Guitar and robot arm representation
 - **Blue Links**: Robot arm segments
 - **Red Dots**: Joint positions
 - **Green Dot**: End effector (pick)
